@@ -7,6 +7,7 @@
     <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <style>
         :root {
+            /* 라이트 모드 (낮은 채도의 연두, 초록, 하늘, 파랑) */
             --bg-main: #ffffff;
             --bg-section: #f5f9fa;
             --bg-card: #ffffff;
@@ -17,11 +18,12 @@
             --text-main: #2b3238;
             --text-sub: #5c6670;
             --accent-sparkle: rgba(255, 248, 220, 0.8);
-            --hero-overlay: rgba(0, 0, 0, 0.2);
+            --hero-overlay: rgba(255, 255, 255, 0.25);
             --border-color: rgba(0, 0, 0, 0.08);
         }
 
         [data-theme="dark"] {
+            /* 다크 모드 */
             --bg-main: #181c1f;
             --bg-section: #1f2428;
             --bg-card: #262c32;
@@ -32,7 +34,7 @@
             --text-main: #f0f4f7;
             --text-sub: #a1adb7;
             --accent-sparkle: rgba(255, 248, 220, 0.2);
-            --hero-overlay: rgba(0, 0, 0, 0.5);
+            --hero-overlay: rgba(0, 0, 0, 0.55);
             --border-color: rgba(255, 255, 255, 0.08);
         }
 
@@ -149,7 +151,7 @@
             color: #ffffff;
         }
 
-        /* --- [메인화면] 설산 배경의 넓은 초원과 직선 도로 사진 --- */
+        /* --- 히어로 섹션 (5번째 사진 '0.jpg' 적용) --- */
         .hero {
             height: 100vh;
             display: flex;
@@ -159,31 +161,35 @@
             text-align: center;
             padding: 0 20px;
             position: relative;
-            background-attachment: fixed;
+            background-attachment: scroll; /* 모바일 성능을 위해 패럴랙스 해제 */
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
+            /* 5번째 사진 '0.jpg' 사용 */
             background-image: linear-gradient(var(--hero-overlay), var(--hero-overlay)), 
-                            url('https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=1920&q=80');
+                            url('0.jpg');
         }
 
         .hero-title {
             font-size: 3.5rem;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--text-main);
             line-height: 1.3;
             margin-bottom: 18px;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 15px rgba(255, 255, 255, 0.4);
             opacity: 0;
             transform: translateY(25px);
             animation: titleFadeIn 1.5s forwards cubic-bezier(0.25, 1, 0.5, 1);
         }
 
+        [data-theme="dark"] .hero-title {
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+        }
+
         .hero-sub {
             font-size: 1.25rem;
-            color: #f0f4f7;
+            color: var(--text-sub);
             font-weight: 500;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
             opacity: 0;
             transform: translateY(25px);
             animation: titleFadeIn 1.5s forwards cubic-bezier(0.25, 1, 0.5, 1) 0.4s;
@@ -193,7 +199,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- 관광지 소개 (SPA 세부 페이지) --- */
+        /* --- 관광지 소개 (SPA 영역) --- */
         .spa-section {
             padding: 120px 20px 90px;
             background-color: var(--bg-main);
@@ -279,7 +285,7 @@
             gap: 8px;
         }
 
-        /* --- 매력 포인트 카드 섹션 --- */
+        /* --- 강점 카드 섹션 --- */
         .features {
             padding: 90px 20px;
             background-color: var(--bg-section);
@@ -310,38 +316,32 @@
             border-radius: 16px;
             text-align: left;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         }
 
         .card-icon {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--color-primary-blue);
-            background: var(--bg-section);
-            padding: 4px 10px;
-            border-radius: 6px;
+            font-size: 2rem;
             margin-bottom: 15px;
             display: inline-block;
         }
 
         .card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
             color: var(--text-main);
         }
 
         .card p {
             font-size: 0.95rem;
             color: var(--text-sub);
-            line-height: 1.6;
         }
 
-        /* --- 추천 일정 --- */
+        /* --- 추천 일정 소개 섹션 --- */
         .schedule {
             padding: 90px 20px;
             background-color: var(--bg-main);
@@ -376,7 +376,7 @@
             color: var(--text-sub);
         }
 
-        /* --- 댓글 작성 컴포넌트 --- */
+        /* --- 💬 신규 추가: 댓글 작성 컴포넌트 --- */
         .comments-section {
             padding: 90px 20px;
             background-color: var(--bg-section);
@@ -471,6 +471,7 @@
             color: var(--text-main);
         }
 
+        /* --- 푸터 --- */
         footer {
             background-color: #1a1e21;
             color: #838c94;
@@ -480,31 +481,11 @@
         }
 
         @media (max-width: 850px) {
-            .navbar {
-                padding: 12px 20px;
-                flex-direction: column;
-                gap: 12px;
-            }
-            .nav-container {
-                justify-content: center;
-                gap: 6px;
-            }
-            .nav-btn {
-                padding: 6px 14px;
-                font-size: 0.85rem;
-            }
-            .content-wrapper {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-            .timeline {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .hero {
-                background-attachment: scroll !important;
-                background-position: center !important;
-            }
+            .navbar { padding: 12px 20px; flex-direction: column; gap: 12px; }
+            .nav-container { justify-content: center; gap: 6px; }
+            .nav-btn { padding: 6px 14px; font-size: 0.85rem; }
+            .content-wrapper { grid-template-columns: 1fr; gap: 25px; }
+            .timeline { flex-direction: column; gap: 12px; }
             .hero-title { font-size: 2.2rem; }
             .hero-sub { font-size: 1rem; }
         }
@@ -512,12 +493,15 @@
 </head>
 <body data-theme="light">
 
+    <!-- 스크롤 진행률 바 -->
     <div class="scroll-progress-container">
         <div class="scroll-progress-bar" id="progressBar"></div>
     </div>
 
+    <!-- 스크롤 파티클 백그라운드 효과용 캔버스 -->
     <canvas id="particle-canvas"></canvas>
 
+    <!-- 네비게이션 헤더 -->
     <nav class="navbar">
         <div class="nav-container">
             <button class="nav-btn active" id="btn-hakodate" onclick="navigateSPA('hakodate')">하코다테</button>
@@ -526,25 +510,27 @@
             <button class="nav-btn" id="btn-biei" onclick="navigateSPA('biei')">비에이</button>
         </div>
         <div class="nav-utils">
+            <!-- 언어 변경 및 다크모드 컴포넌트 버튼 세트 -->
             <button class="util-btn" onclick="toggleLanguage()" id="langBtn">EN</button>
             <button class="util-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
         </div>
     </nav>
 
-    <!-- [메인화면] 직선도로가 길게 뻗은 설산 초원 배경 -->
+    <!-- 1. 히어로 섹션 (5번째 사진 '0.jpg' 적용) -->
     <header class="hero" id="heroSection">
         <h1 class="hero-title" id="mainTitle">누구나 쉽게 떠나는<br>홋카이도 여행 가이드</h1>
         <p class="hero-sub" id="mainSub">자연스럽고 은은하게, 반짝이는 명소들을 한눈에 탐색해보세요</p>
     </header>
 
+    <!-- 2. 관광지 소개 섹션 (SPA 영역) -->
     <section id="introduction" class="spa-section">
         <div class="container">
             
-            <!-- [세부페이지 1] 하코다테 : 밤시간대의 전망대 야경사진 -->
+            <!-- 하코다테 (1번 사진 '1.jpg' 적용) -->
             <div id="hakodate" class="spa-content active">
                 <div class="content-wrapper">
                     <div class="image-viewport">
-                        <img src="https://images.unsplash.com/photo-1543157145-f78c636d023d?auto=format&fit=crop&w=1200&q=80" alt="하코다테산 전망대 야경">
+                        <img src="1.jpg" alt="하코다테 야경">
                     </div>
                     <div class="info-panel">
                         <span class="city-tag" data-key="tag-hako">세계가 감탄한 밤하늘</span>
@@ -555,11 +541,11 @@
                 </div>
             </div>
 
-            <!-- [세부페이지 2] 삿포로 : 1km 꽃밭 공원과 큰 디지털시계가 달린 빨간색 TV 타워 -->
+            <!-- 삿포로 (2번 사진 '2.jpg' 적용) -->
             <div id="sapporo" class="spa-content">
                 <div class="content-wrapper">
                     <div class="image-viewport">
-                        <img src="https://images.unsplash.com/photo-1619851609189-ddb17bf71871?auto=format&fit=crop&w=1200&q=80" alt="삿포로 TV타워와 공원">
+                        <img src="2.jpg" alt="삿포로 오도리 공원">
                     </div>
                     <div class="info-panel">
                         <span class="city-tag" data-key="tag-sap">도시와 대자연의 완벽한 조화</span>
@@ -570,26 +556,26 @@
                 </div>
             </div>
 
-            <!-- [세부페이지 3] 오타루 : 벽돌길, 돌담장, 운하와 뒷배경의 낮은 빨간벽돌 창고들 -->
+            <!-- 오타루 (3번 사진 '3.jpg' 적용) -->
             <div id="otaru" class="spa-content">
                 <div class="content-wrapper">
                     <div class="image-viewport">
-                        <img src="https://images.unsplash.com/photo-1541097203110-3c1fa85b2f2d?auto=format&fit=crop&w=1200&q=80" alt="오타루 운하 창고">
+                        <img src="3.jpg" alt="오타루 운하">
                     </div>
                     <div class="info-panel">
                         <span class="city-tag" data-key="tag-otaru">가스등 아래 흐르는 로맨스</span>
                         <h2 class="spot-name" data-key="title-otaru">오타루 운하</h2>
-                        <p class="spot-desc" data-key="desc-otaru">붉은 벽돌 창고를 따라 잔잔하게 흐르는 물길과 아날로그 감성이 깃든 가스등의 조화가 매력적인 곳입니다. 어스름한 저녁 시간이 되면 운하 표면 위로 가장 은은하고 반짝이는 야경이 반사됩니다.</p>
+                        <p class="spot-desc" data-key="desc-otaru">붉은 벽돌 창고를 따라 잔잔하게 흐르는 물길 Caucasian과 아날로그 감성이 깃든 가스등의 조화가 매력적인 곳입니다. 어스름한 저녁 시간이 되면 운하 표면 위로 가장 은은하고 반짝이는 야경이 반사됩니다.</p>
                         <div class="map-indicator"><span data-key="loc-otaru">🗺️ <b>위치 확인:</b> 삿포로역에서 해안선을 따라 JR 열차로 약 35분 거리</span></div>
                     </div>
                 </div>
             </div>
 
-            <!-- [세부페이지 4] 비에이 : 푸른 청의 호수 배경 -->
+            <!-- 비에이 (4번 사진 '4.jpg' 적용) -->
             <div id="biei" class="spa-content">
                 <div class="content-wrapper">
                     <div class="image-viewport">
-                        <img src="https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?auto=format&fit=crop&w=1200&q=80" alt="비에이 청의호수">
+                        <img src="4.jpg" alt="비에이 청의 호수">
                     </div>
                     <div class="info-panel">
                         <span class="city-tag" data-key="tag-biei">신비로운 코발트블루의 대자연</span>
@@ -603,30 +589,32 @@
         </div>
     </section>
 
+    <!-- 3. 강점 카드 섹션 -->
     <section class="features">
         <div class="container">
-            <h2 class="section-title" id="f-title">홋카이도 자유여행의 주목할 만한 점</h2>
-            <p class="section-desc" id="f-desc">낮은 채도의 하늘과 대자연이 주는 평온함 속, 우리가 만나게 될 매력들입니다.</p>
+            <h2 class="section-title" id="f-title">쉽고 명확한 가이드 시스템</h2>
+            <p class="section-desc" id="f-desc">처음 준비하는 사람들의 시선에 맞춰 복잡함을 모두 걷어냈습니다.</p>
             <div class="grid-3">
                 <div class="card">
-                    <div class="card-icon">01</div>
-                    <h3 id="c1-title">압도적인 사계절 대자연</h3>
-                    <p id="c1-desc">끝없이 펼쳐지는 코발트블루 빛의 호수와 라벤더 들판, 그리고 겨울이면 세상 모든 소음을 지워버리는 끝없는 설경이 공존하는 신비로운 자연을 마주합니다.</p>
+                    <div class="card-icon">🎨</div>
+                    <h3>직관적인 전용 일러스트</h3>
+                    <p>지역별 정체성과 실제 랜드마크의 매력이 고스란히 담긴 맞춤 비주얼로 여행지의 분위기를 즉시 파악합니다.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">02</div>
-                    <h3 id="c2-title">아날로그 감성의 로컬 항구</h3>
-                    <p id="c2-desc">근대 개항기의 붉은 벽돌 창고, 밤하늘을 은은하게 밝히는 가스등 거리, 그리고 세계 3대 야경으로 손꼽히는 지형이 만들어내는 낭만적인 밤을 산책합니다.</p>
+                    <div class="card-icon">🗺️</div>
+                    <h3>지리적 위치 매칭 가이드</h3>
+                    <p>각 명소를 확인하는 순간, 홋카이도 전체 지형 속 어느 거점에 있는지를 매핑 인디케이터가 직관적으로 짚어줍니다.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">03</div>
-                    <h3 id="c3-title">동선이 명확한 기차 여행</h3>
-                    <p id="c3-desc">중심지 삿포로를 기점으로 오타루, 비에이, 하코다테까지 JR 철도가 직관적으로 연결되어 있어 초보 자유여행자도 헤매지 않고 명확하게 여정을 구성할 수 있습니다.</p>
+                    <div class="card-icon">✨</div>
+                    <h3>독보적인 로컬 장점 엄선</h3>
+                    <p>가장 예쁜 연출 시간대와 지형적 특성 등 초보자가 헤매기 쉬운 요소들을 스토리텔링 방식으로 쉽게 녹여냈습니다.</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- 4. 추천 일정 간단 소개 섹션 (스크롤 영역) -->
     <section class="schedule">
         <div class="container">
             <h2 class="section-title" id="s-title">추천 여정 동선 간단히 보기</h2>
@@ -652,37 +640,14 @@
         </div>
     </section>
 
-    <section class="comments-section">
-        <div class="container">
-            <h2 class="section-title" id="com-title">여행자 한줄평 & 방명록</h2>
-            <p class="section-desc" id="com-desc">홋카이도 여행을 준비하는 다른 분들을 위해 자유로운 팁이나 기대평을 남겨주세요.</p>
-            
-            <div class="comment-form">
-                <div class="comment-inputs">
-                    <input type="text" id="commentAuthor" placeholder="닉네임 (Nickname)" required>
-                </div>
-                <textarea id="commentText" placeholder="따뜻하고 은은한 한마디를 남겨주세요 (Comment)" required></textarea>
-                <button type="button" class="comment-submit-btn" onclick="addComment()" id="comSubmitBtn">등록하기 (Submit)</button>
-            </div>
-
-            <div class="comments-list" id="commentsList">
-                <div class="comment-item">
-                    <div class="comment-header">
-                        <span class="comment-author">겨울아이</span>
-                        <span>2026.07.13</span>
-                    </div>
-                    <div class="comment-body">비에이 청의 호수는 낮 채도의 흐린 날 가도 운치 있더라고요! 가이드 무드가 너무 예쁩니다.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- 5. 푸터 -->
     <footer>
         <div class="container">
             <p>© 2026 홋카이도 자유여행 가이드. All Rights Reserved.</p>
         </div>
     </footer>
 
+    <!-- SPA 렌더링 스크립트 -->
     <script>
         let currentLang = 'ko';
         
@@ -690,22 +655,14 @@
             ko: {
                 mainTitle: "누구나 쉽게 떠나는<br>홋카이도 여행 가이드",
                 mainSub: "자연스럽고 은은하게, 반짝이는 명소들을 한눈에 탐색해보세요",
-                fTitle: "홋카이도 자유여행의 주목할 만한 점",
-                fDesc: "낮은 채도의 하늘과 대자연이 주는 평온함 속, 우리가 만나게 될 매력들입니다.",
+                fTitle: "쉽고 명확한 가이드 시스템",
+                fDesc: "처음 준비하는 사람들의 시선에 맞춰 복잡함을 모두 걷어냈습니다.",
                 sTitle: "추천 여정 동선 간단히 보기",
                 sDesc: "가이드에 소개된 네 가지 핵심 권역을 효과적으로 엮은 동선입니다.",
-                c1Title: "압도적인 사계절 대자연",
-                c1Desc: "끝없이 펼쳐지는 코발트블루 빛의 호수와 라벤더 들판, 그리고 겨울이면 세상 모든 소음을 지워버리는 끝없는 설경이 공존하는 신비로운 자연을 마주합니다.",
-                c2Title: "아날로그 감성의 로컬 항구",
-                c2Desc: "근대 개항기의 붉은 벽돌 창고, 밤하늘을 은은하게 밝히는 가스등 거리, 그리고 세계 3대 야경으로 손꼽히는 지형이 만들어내는 낭만적인 밤을 산책합니다.",
-                c3Title: "동선이 명확한 기차 여행",
-                c3Desc: "중심지 삿포로를 기점으로 오타루, 비에이, 하코다테까지 JR 철도가 직관적으로 연결되어 있어 초보 자유여행자도 헤매지 않고 명확하게 여정을 구성할 수 있습니다.",
                 d1: "삿포로 입국 & 오도리 공원 야간 산책",
                 d2: "감성 가득한 해안선 루트, 오타루 운하",
                 d3: "신비로운 자연의 빛을 담은 비에이 투어",
                 d4: "하코다테 명품 야경 감상 후 여정 마무리",
-                comTitle: "여행자 한줄평 & 방명록",
-                comDesc: "홋카이도 여행을 준비하는 다른 분들을 위해 자유로운 팁이나 기대평을 남겨주세요.",
                 "tag-hako": "세계가 감탄한 밤하늘", "title-hako": "하코다테 야경", "desc-hako": "양측으로 대칭을 이루는 독특한 해안 곡선 지형 사이에 보석을 흩뿌린 듯 은은하고 반짝거리는 불빛이 펼쳐집니다.", "loc-hako": "🗺️ 위치 확인: 홋카이도 최남단 반도 끝자락에 위치한 항구도시",
                 "tag-sap": "도시와 대자연의 완벽한 조화", "title-sap": "삿포로 오도리 공원", "desc-sap": "도시 한복판을 길게 가로지르는 푸른 휴식처이자 중심 거점입니다. 상징적인 TV 타워가 존재합니다.", "loc-sap": "🗺️ 위치 확인: 신치토세 공항에서 JR 쾌속 열차로 바로 연결되는 교통의 허브",
                 "tag-otaru": "가스등 아래 흐르는 로맨스", "title-otaru": "오타루 운하", "desc-otaru": "붉은 벽돌 창고를 따라 잔잔하게 흐르는 물길과 아날로그 가스등의 조화가 매력적인 공간입니다.", "loc-otaru": "🗺️ 위치 확인: 삿포로역에서 해안선을 따라 JR 열차로 약 35분 거리",
@@ -714,22 +671,14 @@
             en: {
                 mainTitle: "Easy Hokkaido<br>Travel Guide for Everyone",
                 mainSub: "Explore subtle, sparkling, and natural attractions at a single glance",
-                fTitle: "Remarkable Points of Hokkaido",
-                fDesc: "Under low-saturation skies and deep serene nature, these are the charms we will encounter.",
+                fTitle: "Simple & Clear Guide System",
+                fDesc: "We removed all complexities tailored completely to the eyes of first-time travelers.",
                 sTitle: "Recommended Itinerary Overview",
                 sDesc: "An efficient travel dynamic pathway linking all four core destinations introduced.",
-                c1Title: "Overwhelming Four-Season Nature",
-                c1Desc: "Encounter mystical nature where endless cobalt-blue ponds, lavender fields, and vast winter snowscapes that silence the world all coexist.",
-                c2Title: "Sentimental Local Ports",
-                c2Desc: "Stroll through romantic nights created by red-brick warehouses from the early port-opening era, analog gas lamps, and a world-renowned top 3 nightscape.",
-                c3Title: "Clear Train Journey Pathways",
-                c3Desc: "With Sapporo as the hub, JR trains directly link to Otaru, Biei, and Hakodate, allowing beginners to plan routes clearly without getting lost.",
                 d1: "Arrival in Sapporo & Night walk around Odori Park",
                 d2: "Otaru Canal Route filled with sentimental coastline",
                 d3: "Biei Tour discovering mysterious indigo lake-views",
                 d4: "Enjoy Hakodate Premium Nightscape and conclude journey",
-                comTitle: "Traveler Guestbook & Reviews",
-                comDesc: "Please share friendly tips or your exciting expectations for upcoming travelers.",
                 "tag-hako": "World-Class Night View", "title-hako": "Hakodate Nightscape", "desc-hako": "Glittering jewels of light scatter beautifully between distinctive symmetrical coastal curves.", "loc-hako": "🗺️ Map Check: Port city located at the southernmost tip of Hokkaido peninsula",
                 "tag-sap": "Harmony of City and Nature", "title-sap": "Sapporo Odori Park", "desc-sap": "A long green oasis slicing through the heart of the city, complete with the iconic TV Tower landmark.", "loc-sap": "🗺️ Map Check: Transportation hub directly linked from New Chitose Airport via JR Rapid Train",
                 "tag-otaru": "Romance Under Gaslights", "title-otaru": "Otaru Canal", "desc-otaru": "A romantic canal featuring analog gas lamps casting warm amber glows against heritage brick warehouses.", "loc-otaru": "🗺️ Map Check: Roughly 35 minutes via JR lines tracing the coastline from Sapporo Station",
@@ -747,19 +696,10 @@
             document.getElementById('f-desc').innerText = dictionary[currentLang].fDesc;
             document.getElementById('s-title').innerText = dictionary[currentLang].sTitle;
             document.getElementById('s-desc').innerText = dictionary[currentLang].sDesc;
-            document.getElementById('c1-title').innerText = dictionary[currentLang].c1Title;
-            document.getElementById('c1-desc').innerText = dictionary[currentLang].c1Desc;
-            document.getElementById('c2-title').innerText = dictionary[currentLang].c2Title;
-            document.getElementById('c2-desc').innerText = dictionary[currentLang].c2Desc;
-            document.getElementById('c3-title').innerText = dictionary[currentLang].c3Title;
-            document.getElementById('c3-desc').innerText = dictionary[currentLang].c3Desc;
             document.getElementById('d1-text').innerText = dictionary[currentLang].d1;
             document.getElementById('d2-text').innerText = dictionary[currentLang].d2;
             document.getElementById('d3-text').innerText = dictionary[currentLang].d3;
             document.getElementById('d4-text').innerText = dictionary[currentLang].d4;
-            document.getElementById('com-title').innerText = dictionary[currentLang].comTitle;
-            document.getElementById('com-desc').innerText = dictionary[currentLang].comDesc;
-            document.getElementById('comSubmitBtn').innerText = currentLang === 'ko' ? '등록하기 (Submit)' : 'Submit';
 
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
@@ -781,13 +721,19 @@
         }
 
         function navigateSPA(cityId) {
-            document.querySelectorAll('.spa-content').forEach(content => content.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            // 1. 모든 도시 콘텐츠 숨김 처리
+            const contents = document.querySelectorAll('.spa-content');
+            contents.forEach(content => content.classList.remove('active'));
 
+            // 2. 내비게이션 바의 모든 버튼 활성화 스타일 해제
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // 3. 선택된 도시 콘텐츠 영역 표시 및 해당 버튼 활성화
             document.getElementById(cityId).classList.add('active');
-            const targetBtn = document.getElementById('btn-' + cityId);
-            if(targetBtn) targetBtn.classList.add('active');
+            event.currentTarget.classList.add('active');
 
+            // 4. 컴포넌트가 바뀔 때 시선이 자연스럽게 가도록 해당 섹션 상단으로 스크롤 이동
             document.getElementById('introduction').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
