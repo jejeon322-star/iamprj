@@ -3,517 +3,853 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>설국으로의 초대, 홋카이도 겨울 여행 가이드</title>
-    <!-- 폰트 및 아이콘 에셋 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    
+    <title>누구나 쉽게 떠나는 홋카이도 여행 가이드</title>
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <style>
-        /* --- 🎨 1. 디자인 시스템 & 전역 스타일 --- */
         :root {
-            --primary-blue: #2b4c7e;
-            --light-blue: #eef5fc;
-            --snow-white: #f8fafc;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --accent-orange: #f59e0b;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
-            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.05);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* 라이트 모드 (낮은 채도의 연두, 초록, 하늘, 파랑) */
+            --bg-main: #ffffff;
+            --bg-section: #f5f9fa;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255, 255, 255, 0.85);
+            --color-primary-blue: #5b7c99;
+            --color-primary-green: #6e9685;
+            --color-bg-green: #f2f7f2;
+            --text-main: #2b3238;
+            --text-sub: #5c6670;
+            --accent-sparkle: rgba(255, 248, 220, 0.8);
+            --hero-overlay: rgba(255, 255, 255, 0.25);
+            --border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] {
+            /* 다크 모드 */
+            --bg-main: #181c1f;
+            --bg-section: #1f2428;
+            --bg-card: #262c32;
+            --bg-nav: rgba(24, 28, 31, 0.85);
+            --color-primary-blue: #8bb2d6;
+            --color-primary-green: #9bc4b2;
+            --color-bg-green: #232d28;
+            --text-main: #f0f4f7;
+            --text-sub: #a1adb7;
+            --accent-sparkle: rgba(255, 248, 220, 0.2);
+            --hero-overlay: rgba(0, 0, 0, 0.55);
+            --border-color: rgba(255, 255, 255, 0.08);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: "Pretendard Variable", Pretendard, sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: var(--snow-white);
-            color: var(--text-dark);
-            line-height: 1.7;
+            color: var(--text-main);
+            background-color: var(--bg-main);
+            line-height: 1.6;
             overflow-x: hidden;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M8 0l1.5 5.5L15 7l-5.5 1.5L8 14l-1.5-5.5L1 7l5.5-1.5z' fill='%235b7c99' opacity='0.8'/%3E%/svg%3E") 8 8, auto;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* --- 🏔️ 2. 헤더 & 히어로 섹션 --- */
-        .hero {
-            position: relative;
-            height: 60vh;
-            min-height: 450px;
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1547823065-4cbbb2d4d185?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            padding: 20px;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
+        /* --- 상단 프로그레스 바 --- */
+        .scroll-progress-container {
+            position: fixed;
+            top: 0;
             left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to top, var(--snow-white), transparent);
-            pointer-events: none;
+            width: 100%;
+            height: 4px;
+            z-index: 2000;
+        }
+        .scroll-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--color-primary-green), var(--color-primary-blue));
         }
 
-        .hero-title-en {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .hero-title-ko {
-            font-size: 1.6rem;
-            font-weight: 300;
-            letter-spacing: 4px;
-            opacity: 0.95;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        /* --- 📦 3. 메인 레이아웃 및 컨테이너 --- */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 40px 20px 80px;
-        }
-
-        /* --- 📝 4. 소개글 섹션 --- */
-        .intro-section {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 60px;
-            padding: 0 10px;
-        }
-
-        .intro-section h2 {
-            font-size: 1.8rem;
-            color: var(--primary-blue);
-            margin-bottom: 16px;
-            font-weight: 700;
-        }
-
-        .intro-section p {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            word-break: keep-all;
-        }
-
-        /* --- 🗺️ 5. 여행 코스 카드 레이아웃 --- */
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1-fragment);
-            gap: 30px;
-            margin-bottom: 70px;
-        }
-
-        @media (max-width: 968px) {
-            .course-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 640px) {
-            .course-grid { grid-template-columns: 1fr; }
-            .hero-title-en { font-size: 2.5rem; }
-            .hero-title-ko { font-size: 1.2rem; }
-        }
-
-        .course-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .course-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-md);
-            border-color: rgba(43, 76, 126, 0.15);
-        }
-
-        .card-image-wrapper {
-            position: relative;
-            padding-top: 60%; /* 5:3 비율 */
-            overflow: hidden;
-        }
-
-        .card-image {
-            position: absolute;
+        #particle-canvas {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
+            pointer-events: none;
+            z-index: 999;
         }
 
-        .course-card:hover .card-image {
-            transform: scale(1.05);
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(43, 76, 126, 0.9);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            backdrop-filter: blur(4px);
-            letter-spacing: 0.5px;
-        }
-
-        .card-content {
-            padding: 24px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .card-desc {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            flex-grow: 1;
-            word-break: keep-all;
-        }
-
-        .card-info-list {
-            list-style: none;
-            border-top: 1px dashed var(--border-color);
-            padding-top: 15px;
-        }
-
-        .card-info-item {
-            display: flex;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .card-info-item:last-child { margin-bottom: 0; }
-
-        .card-info-item i {
-            width: 20px;
-            color: var(--primary-blue);
-            margin-right: 8px;
-            font-size: 0.9rem;
-        }
-
-        /* --- 💬 6. 실시간 댓글 컴포넌트 --- */
-        .comments-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-            max-width: 850px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 640px) {
-            .comments-section { padding: 24px; }
-        }
-
-        .comments-title {
-            font-size: 1.4rem;
-            color: var(--primary-blue);
-            margin-bottom: 24px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .comment-form {
-            display: grid;
-            grid-template-columns: 180px 1fr auto;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .comment-form {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .input-field {
+        /* --- 네비게이션 바 --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            background-color: var(--snow-white);
-            transition: var(--transition);
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            background-color: white;
-            box-shadow: 0 0 0 3px rgba(43, 76, 126, 0.1);
-        }
-
-        .btn-submit {
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: var(--transition);
+            background: var(--bg-nav);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.03);
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            padding: 15px 40px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            color: var(--color-primary-blue);
+            box-shadow: 0 0 12px var(--accent-sparkle);
+        }
+
+        .nav-btn.active {
+            color: #ffffff;
+            background-color: var(--color-primary-blue);
+        }
+
+        .nav-utils {
+            display: flex;
             gap: 8px;
         }
 
-        .btn-submit:hover {
-            background-color: #1e355b;
-            transform: translateY(-1px);
+        .util-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .util-btn:hover {
+            background: var(--color-primary-blue);
+            color: #ffffff;
+        }
+
+        /* --- 히어로 섹션 (5번째 사진 '0.jpg' 적용) --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            background-attachment: scroll; /* 모바일 성능을 위해 패럴랙스 해제 */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            /* 5번째 사진 '0.jpg' 사용 */
+            background-image: linear-gradient(var(--hero-overlay), var(--hero-overlay)), 
+                            url('0.jpg');
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.3;
+            margin-bottom: 18px;
+            text-shadow: 0 2px 15px rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            transform: translateY(25px);
+            animation: titleFadeIn 1.5s forwards cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        [data-theme="dark"] .hero-title {
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-sub {
+            font-size: 1.25rem;
+            color: var(--text-sub);
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(25px);
+            animation: titleFadeIn 1.5s forwards cubic-bezier(0.25, 1, 0.5, 1) 0.4s;
+        }
+
+        @keyframes titleFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 관광지 소개 (SPA 영역) --- */
+        .spa-section {
+            padding: 120px 20px 90px;
+            background-color: var(--bg-main);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .spa-content {
+            display: none;
+            animation: componentFade 0.5s ease-out forwards;
+        }
+
+        .spa-content.active {
+            display: block;
+        }
+
+        @keyframes componentFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .image-viewport {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            aspect-ratio: 16/10;
+        }
+
+        .image-viewport img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-panel {
+            padding: 10px 0;
+        }
+
+        .city-tag {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-primary-blue);
+            background-color: var(--bg-section);
+            padding: 4px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .spot-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .spot-desc {
+            font-size: 1rem;
+            color: var(--text-sub);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .map-indicator {
+            background-color: var(--color-bg-green);
+            border-left: 4px solid var(--color-primary-green);
+            padding: 15px;
+            border-radius: 0 12px 12px 0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- 강점 카드 섹션 --- */
+        .features {
+            padding: 90px 20px;
+            background-color: var(--bg-section);
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .section-desc {
+            font-size: 1.05rem;
+            color: var(--text-sub);
+            margin-bottom: 45px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 35px 25px;
+            border-radius: 16px;
+            text-align: left;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+        }
+
+        /* --- 추천 일정 소개 섹션 --- */
+        .schedule {
+            padding: 90px 20px;
+            background-color: var(--bg-main);
+            text-align: center;
+        }
+
+        .timeline {
+            max-width: 850px;
+            margin: 40px auto 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .timeline-item {
+            flex: 1;
+            background: var(--bg-card);
+            padding: 20px 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.01);
+            border-top: 4px solid var(--color-primary-blue);
+        }
+
+        .timeline-item h4 {
+            color: var(--color-primary-blue);
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .timeline-item p {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        /* --- 💬 신규 추가: 댓글 작성 컴포넌트 --- */
+        .comments-section {
+            padding: 90px 20px;
+            background-color: var(--bg-section);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .comment-form {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            margin-top: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .comment-inputs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .comment-inputs input, .comment-form textarea {
+            width: 100%;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .comment-inputs input:focus, .comment-form textarea:focus {
+            border-color: var(--color-primary-blue);
+        }
+
+        .comment-form textarea {
+            height: 100px;
+            resize: none;
+            margin-bottom: 12px;
+        }
+
+        .comment-submit-btn {
+            background-color: var(--color-primary-blue);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .comment-submit-btn:hover {
+            opacity: 0.9;
         }
 
         .comments-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            max-width: 700px;
+            margin: 30px auto 0;
+            text-align: left;
         }
 
         .comment-item {
-            background-color: var(--snow-white);
-            padding: 20px;
+            background: var(--bg-card);
+            padding: 18px;
             border-radius: 12px;
-            border: 1px solid rgba(226, 232, 240, 0.6);
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+            animation: componentFade 0.4s ease-out;
         }
 
         .comment-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--text-sub);
+            margin-bottom: 6px;
+            font-weight: 600;
         }
 
         .comment-author {
-            font-weight: 700;
-            color: var(--text-dark);
-            font-size: 0.95rem;
+            color: var(--color-primary-blue);
         }
 
         .comment-body {
             font-size: 0.95rem;
-            color: #334155;
-            white-space: pre-line;
-            word-break: break-all;
+            color: var(--text-main);
+        }
+
+        /* --- 푸터 --- */
+        footer {
+            background-color: #1a1e21;
+            color: #838c94;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 850px) {
+            .navbar { padding: 12px 20px; flex-direction: column; gap: 12px; }
+            .nav-container { justify-content: center; gap: 6px; }
+            .nav-btn { padding: 6px 14px; font-size: 0.85rem; }
+            .content-wrapper { grid-template-columns: 1fr; gap: 25px; }
+            .timeline { flex-direction: column; gap: 12px; }
+            .hero-title { font-size: 2.2rem; }
+            .hero-sub { font-size: 1rem; }
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <!-- 🏔️ 헤더 영역 -->
-    <header class="hero">
-        <h1 class="hero-title-en">HOKKAIDO</h1>
-        <p class="hero-title-ko">겨울의 중심에서 마주한 설국</p>
+    <!-- 스크롤 진행률 바 -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- 스크롤 파티클 백그라운드 효과용 캔버스 -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- 네비게이션 헤더 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <button class="nav-btn active" id="btn-hakodate" onclick="navigateSPA('hakodate')">하코다테</button>
+            <button class="nav-btn" id="btn-sapporo" onclick="navigateSPA('sapporo')">삿포로</button>
+            <button class="nav-btn" id="btn-otaru" onclick="navigateSPA('otaru')">오타루</button>
+            <button class="nav-btn" id="btn-biei" onclick="navigateSPA('biei')">비에이</button>
+        </div>
+        <div class="nav-utils">
+            <!-- 언어 변경 및 다크모드 컴포넌트 버튼 세트 -->
+            <button class="util-btn" onclick="toggleLanguage()" id="langBtn">EN</button>
+            <button class="util-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+        </div>
+    </nav>
+
+    <!-- 1. 히어로 섹션 (5번째 사진 '0.jpg' 적용) -->
+    <header class="hero" id="heroSection">
+        <h1 class="hero-title" id="mainTitle">누구나 쉽게 떠나는<br>홋카이도 여행 가이드</h1>
+        <p class="hero-sub" id="mainSub">자연스럽고 은은하게, 반짝이는 명소들을 한눈에 탐색해보세요</p>
     </header>
 
-    <main class="container">
-        <!-- 📝 여행지 소개 -->
-        <section class="intro-section">
-            <h2>Hokkaido Winter Highlights</h2>
-            <p>끝없이 펼쳐진 새하얀 설원과 고즈넉한 온천마을, 그리고 눈 축제의 낭만이 있는 곳. 올겨울 놓치지 말아야 할 최고의 홋카이도 추천 코스를 소개합니다.</p>
-        </section>
-
-        <!-- 🗺️ 추천 코스 그리드 -->
-        <section class="course-grid">
-            <!-- 코스 1 -->
-            <article class="course-card">
-                <div class="card-image-wrapper">
-                    <span class="card-badge">감성 코스</span>
-                    <img src="https://images.unsplash.com/photo-1578922756598-b148903c767c?auto=format&fit=crop&w=600&q=80" alt="오타루 운하" class="card-image">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">낭만의 오타루 운하</h3>
-                    <p class="card-desc">가스등 불빛이 아스라이 비치는 겨울 운하를 따라 걸으며 오르골당의 맑은 멜로디에 흠뻑 취해보세요.</p>
-                    <ul class="card-info-list">
-                        <li class="card-info-item"><i class="fa-regular fa-clock"></i>소요 시간: 반나절 코스</li>
-                        <li class="card-info-item"><i class="fa-solid fa-wand-magic-sparkles"></i>핵심 포인트: 야경 및 오르골 투어</li>
-                    </ul>
-                </div>
-            </article>
-
-            <!-- 코스 2 -->
-            <article class="course-card">
-                <div class="card-image-wrapper">
-                    <span class="card-badge">힐링 코스</span>
-                    <img src="https://images.unsplash.com/photo-1542044896530-05d85be9b11a?auto=format&fit=crop&w=600&q=80" alt="노보리베츠 온천" class="card-image">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">노보리베츠 온천 휴양</h3>
-                    <p class="card-desc">자욱한 유황 연기가 피어오르는 지옥계곡을 산책한 후, 따뜻한 노천탕에 몸을 담그고 흰 눈을 감상합니다.</p>
-                    <ul class="card-info-list">
-                        <li class="card-info-item"><i class="fa-regular fa-clock"></i>소요 시간: 1박 2일 추천</li>
-                        <li class="card-info-item"><i class="fa-solid fa-wand-magic-sparkles"></i>핵심 포인트: 전통 료칸 & 노천욕</li>
-                    </ul>
-                </div>
-            </article>
-
-            <!-- 코스 3 -->
-            <article class="course-card">
-                <div class="card-image-wrapper">
-                    <span class="card-badge">자연 코스</span>
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="비에이 패치워크" class="card-image">
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">비에이 신비로운 설원</h3>
-                    <p class="card-desc">아무도 밟지 않은 거대한 백색 캔버스 위, 홀로 서 있는 크리스마스 트리 나무와 청의 호수를 만나는 여정입니다.</p>
-                    <ul class="card-info-list">
-                        <li class="card-info-item"><i class="fa-regular fa-clock"></i>소요 시간: 전일 버스 투어</li>
-                        <li class="card-info-item"><i class="fa-solid fa-wand-magic-sparkles"></i>핵심 포인트: 설원 스냅 촬영</li>
-                    </ul>
-                </div>
-            </article>
-        </section>
-
-        <!-- 💬 실시간 저장 댓글 섹션 -->
-        <section class="comments-section">
-            <h3 class="comments-title">
-                <i class="fa-regular fa-comments"></i> 홋카이도 여행 한줄평
-            </h3>
+    <!-- 2. 관광지 소개 섹션 (SPA 영역) -->
+    <section id="introduction" class="spa-section">
+        <div class="container">
             
-            <!-- 댓글 등록 양식 -->
-            <div class="comment-form">
-                <input type="text" id="commentAuthor" class="input-field" placeholder="닉네임" maxlength="10">
-                <input type="text" id="commentText" class="input-field" placeholder="겨울 홋카이도 여행에 대한 한줄평을 남겨주세요." maxlength="100">
-                <button onclick="addComment()" class="btn-submit">
-                    등록 <i class="fa-solid fa-paper-plane"></i>
-                </button>
-            </div>
-
-            <!-- 댓글 표출 목록 -->
-            <div id="commentsList" class="comments-list">
-                <!-- JavaScript를 통해 localStorage 데이터가 이곳에 그려집니다 -->
-            </div>
-        </section>
-    </main>
-
-    <!-- ⚙️ 스크립트 기능 (영구 저장 기능 탑재) -->
-    <script>
-        /* --- 💬 1. 댓글 localStorage 저장 함수 --- */
-        function saveComments(commentsData) {
-            localStorage.setItem('hokkaidoComments', JSON.stringify(commentsData));
-        }
-
-        /* --- 💬 2. 댓글 localStorage 로드 및 화면 렌더링 함수 --- */
-        function renderComments() {
-            const list = document.getElementById('commentsList');
-            list.innerHTML = ''; // 중복 출력을 방지하기 위한 초기화
-
-            // localStorage에서 데이터 읽기 (없으면 빈 배열로 시작)
-            const savedComments = JSON.parse(localStorage.getItem('hokkaidoComments')) || [];
-
-            savedComments.forEach(comment => {
-                const commentItem = document.createElement('div');
-                commentItem.className = 'comment-item';
-                commentItem.innerHTML = `
-                    <div class="comment-header">
-                        <span class="comment-author">${comment.author}</span>
-                        <span>${comment.date}</span>
+            <!-- 하코다테 (1번 사진 '1.jpg' 적용) -->
+            <div id="hakodate" class="spa-content active">
+                <div class="content-wrapper">
+                    <div class="image-viewport">
+                        <img src="1.jpg" alt="하코다테 야경">
                     </div>
-                    <div class="comment-body">${comment.text}</div>
-                `;
-                // 최신순 정렬 (새로 등록된 댓글이 가장 상단으로 배치)
-                list.insertBefore(commentItem, list.firstChild); 
+                    <div class="info-panel">
+                        <span class="city-tag" data-key="tag-hako">세계가 감탄한 밤하늘</span>
+                        <h2 class="spot-name" data-key="title-hako">하코다테 야경</h2>
+                        <p class="spot-desc" data-key="desc-hako">양측으로 대칭을 이루는 독특한 해안 곡선 지형 사이에 보석을 흩뿌린 듯 은은하고 반짝거리는 불빛이 펼쳐집니다. 산 위에서 내려다보는 야경은 자유여행의 밤을 완성하는 최고의 순간입니다.</p>
+                        <div class="map-indicator"><span data-key="loc-hako">🗺️ <b>위치 확인:</b> 홋카이도 최남단 반도 끝자락에 위치한 항구도시</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 삿포로 (2번 사진 '2.jpg' 적용) -->
+            <div id="sapporo" class="spa-content">
+                <div class="content-wrapper">
+                    <div class="image-viewport">
+                        <img src="2.jpg" alt="삿포로 오도리 공원">
+                    </div>
+                    <div class="info-panel">
+                        <span class="city-tag" data-key="tag-sap">도시와 대자연의 완벽한 조화</span>
+                        <h2 class="spot-name" data-key="title-sap">삿포로 오도리 공원</h2>
+                        <p class="spot-desc" data-key="desc-sap">도시 한복판을 길게 가로지르는 푸른 휴식처이자 중심 거점입니다. 상징적인 TV 타워가 랜드마크로 우뚝 솟아 있으며, 잔잔한 조명과 산이 어우러져 첫 여행자도 부담 없이 걷기 좋습니다.</p>
+                        <div class="map-indicator"><span data-key="loc-sap">🗺️ <b>위치 확인:</b> 신치토세 공항에서 JR 쾌속 열차로 바로 연결되는 교통의 허브</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오타루 (3번 사진 '3.jpg' 적용) -->
+            <div id="otaru" class="spa-content">
+                <div class="content-wrapper">
+                    <div class="image-viewport">
+                        <img src="3.jpg" alt="오타루 운하">
+                    </div>
+                    <div class="info-panel">
+                        <span class="city-tag" data-key="tag-otaru">가스등 아래 흐르는 로맨스</span>
+                        <h2 class="spot-name" data-key="title-otaru">오타루 운하</h2>
+                        <p class="spot-desc" data-key="desc-otaru">붉은 벽돌 창고를 따라 잔잔하게 흐르는 물길 Caucasian과 아날로그 감성이 깃든 가스등의 조화가 매력적인 곳입니다. 어스름한 저녁 시간이 되면 운하 표면 위로 가장 은은하고 반짝이는 야경이 반사됩니다.</p>
+                        <div class="map-indicator"><span data-key="loc-otaru">🗺️ <b>위치 확인:</b> 삿포로역에서 해안선을 따라 JR 열차로 약 35분 거리</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 비에이 (4번 사진 '4.jpg' 적용) -->
+            <div id="biei" class="spa-content">
+                <div class="content-wrapper">
+                    <div class="image-viewport">
+                        <img src="4.jpg" alt="비에이 청의 호수">
+                    </div>
+                    <div class="info-panel">
+                        <span class="city-tag" data-key="tag-biei">신비로운 코발트블루의 대자연</span>
+                        <h2 class="spot-name" data-key="title-biei">비에이 청의 호수</h2>
+                        <p class="spot-desc" data-key="desc-biei">말라버린 자작나무들이 투명하고 맑은 푸른빛 호수에 반사되어 기묘하고도 평온한 분위기를 자아냅니다. 낮은 채도의 하늘과 나무, 물빛이 주는 자연 고유의 색감이 오감을 편안하게 열어줍니다.</p>
+                        <div class="map-indicator"><span data-key="loc-biei">🗺️ <b>위치 확인:</b> 홋카이도 중앙 아사히카와 인근의 구릉 지대에 위치</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3. 강점 카드 섹션 -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title" id="f-title">쉽고 명확한 가이드 시스템</h2>
+            <p class="section-desc" id="f-desc">처음 준비하는 사람들의 시선에 맞춰 복잡함을 모두 걷어냈습니다.</p>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <h3>직관적인 전용 일러스트</h3>
+                    <p>지역별 정체성과 실제 랜드마크의 매력이 고스란히 담긴 맞춤 비주얼로 여행지의 분위기를 즉시 파악합니다.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🗺️</div>
+                    <h3>지리적 위치 매칭 가이드</h3>
+                    <p>각 명소를 확인하는 순간, 홋카이도 전체 지형 속 어느 거점에 있는지를 매핑 인디케이터가 직관적으로 짚어줍니다.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">✨</div>
+                    <h3>독보적인 로컬 장점 엄선</h3>
+                    <p>가장 예쁜 연출 시간대와 지형적 특성 등 초보자가 헤매기 쉬운 요소들을 스토리텔링 방식으로 쉽게 녹여냈습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 추천 일정 간단 소개 섹션 (스크롤 영역) -->
+    <section class="schedule">
+        <div class="container">
+            <h2 class="section-title" id="s-title">추천 여정 동선 간단히 보기</h2>
+            <p class="section-desc" id="s-desc">가이드에 소개된 네 가지 핵심 권역을 효과적으로 엮은 동선입니다.</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Day 1</h4>
+                    <p id="d1-text">삿포로 입국 & 오도리 공원 야간 산책</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Day 2</h4>
+                    <p id="d2-text">감성 가득한 해안선 루트, 오타루 운하</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Day 3</h4>
+                    <p id="d3-text">신비로운 자연의 빛을 담은 비에이 투어</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Day 4</h4>
+                    <p id="d4-text">하코다테 명품 야경 감상 후 여정 마무리</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 푸터 -->
+    <footer>
+        <div class="container">
+            <p>© 2026 홋카이도 자유여행 가이드. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- SPA 렌더링 스크립트 -->
+    <script>
+        let currentLang = 'ko';
+        
+        const dictionary = {
+            ko: {
+                mainTitle: "누구나 쉽게 떠나는<br>홋카이도 여행 가이드",
+                mainSub: "자연스럽고 은은하게, 반짝이는 명소들을 한눈에 탐색해보세요",
+                fTitle: "쉽고 명확한 가이드 시스템",
+                fDesc: "처음 준비하는 사람들의 시선에 맞춰 복잡함을 모두 걷어냈습니다.",
+                sTitle: "추천 여정 동선 간단히 보기",
+                sDesc: "가이드에 소개된 네 가지 핵심 권역을 효과적으로 엮은 동선입니다.",
+                d1: "삿포로 입국 & 오도리 공원 야간 산책",
+                d2: "감성 가득한 해안선 루트, 오타루 운하",
+                d3: "신비로운 자연의 빛을 담은 비에이 투어",
+                d4: "하코다테 명품 야경 감상 후 여정 마무리",
+                "tag-hako": "세계가 감탄한 밤하늘", "title-hako": "하코다테 야경", "desc-hako": "양측으로 대칭을 이루는 독특한 해안 곡선 지형 사이에 보석을 흩뿌린 듯 은은하고 반짝거리는 불빛이 펼쳐집니다.", "loc-hako": "🗺️ 위치 확인: 홋카이도 최남단 반도 끝자락에 위치한 항구도시",
+                "tag-sap": "도시와 대자연의 완벽한 조화", "title-sap": "삿포로 오도리 공원", "desc-sap": "도시 한복판을 길게 가로지르는 푸른 휴식처이자 중심 거점입니다. 상징적인 TV 타워가 존재합니다.", "loc-sap": "🗺️ 위치 확인: 신치토세 공항에서 JR 쾌속 열차로 바로 연결되는 교통의 허브",
+                "tag-otaru": "가스등 아래 흐르는 로맨스", "title-otaru": "오타루 운하", "desc-otaru": "붉은 벽돌 창고를 따라 잔잔하게 흐르는 물길과 아날로그 가스등의 조화가 매력적인 공간입니다.", "loc-otaru": "🗺️ 위치 확인: 삿포로역에서 해안선을 따라 JR 열차로 약 35분 거리",
+                "tag-biei": "신비로운 코발트블루의 대자연", "title-biei": "비에이 청의 호수", "desc-biei": "말라버린 자작나무들이 투명하고 맑은 푸른빛 호수에 반사되어 기묘하고 평온한 무드를 전합니다.", "loc-biei": "🗺️ 위치 확인: 홋카이도 중앙 아사히카와 인근의 구릉 지대에 위치"
+            },
+            en: {
+                mainTitle: "Easy Hokkaido<br>Travel Guide for Everyone",
+                mainSub: "Explore subtle, sparkling, and natural attractions at a single glance",
+                fTitle: "Simple & Clear Guide System",
+                fDesc: "We removed all complexities tailored completely to the eyes of first-time travelers.",
+                sTitle: "Recommended Itinerary Overview",
+                sDesc: "An efficient travel dynamic pathway linking all four core destinations introduced.",
+                d1: "Arrival in Sapporo & Night walk around Odori Park",
+                d2: "Otaru Canal Route filled with sentimental coastline",
+                d3: "Biei Tour discovering mysterious indigo lake-views",
+                d4: "Enjoy Hakodate Premium Nightscape and conclude journey",
+                "tag-hako": "World-Class Night View", "title-hako": "Hakodate Nightscape", "desc-hako": "Glittering jewels of light scatter beautifully between distinctive symmetrical coastal curves.", "loc-hako": "🗺️ Map Check: Port city located at the southernmost tip of Hokkaido peninsula",
+                "tag-sap": "Harmony of City and Nature", "title-sap": "Sapporo Odori Park", "desc-sap": "A long green oasis slicing through the heart of the city, complete with the iconic TV Tower landmark.", "loc-sap": "🗺️ Map Check: Transportation hub directly linked from New Chitose Airport via JR Rapid Train",
+                "tag-otaru": "Romance Under Gaslights", "title-otaru": "Otaru Canal", "desc-otaru": "A romantic canal featuring analog gas lamps casting warm amber glows against heritage brick warehouses.", "loc-otaru": "🗺️ Map Check: Roughly 35 minutes via JR lines tracing the coastline from Sapporo Station",
+                "tag-biei": "Mysterious Cobalt Blue Wonder", "title-biei": "Biei Shirogane Blue Pond", "desc-biei": "Withered silver birches reflect beautifully above crystal clear turquoise waters creating serene vibes.", "loc-biei": "🗺️ Map Check: Positioned near the rolling hills of Asahikawa in central Hokkaido"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ko' ? 'en' : 'ko';
+            document.getElementById('langBtn').innerText = currentLang === 'ko' ? 'EN' : 'KO';
+            
+            document.getElementById('mainTitle').innerHTML = dictionary[currentLang].mainTitle;
+            document.getElementById('mainSub').innerText = dictionary[currentLang].mainSub;
+            document.getElementById('f-title').innerText = dictionary[currentLang].fTitle;
+            document.getElementById('f-desc').innerText = dictionary[currentLang].fDesc;
+            document.getElementById('s-title').innerText = dictionary[currentLang].sTitle;
+            document.getElementById('s-desc').innerText = dictionary[currentLang].sDesc;
+            document.getElementById('d1-text').innerText = dictionary[currentLang].d1;
+            document.getElementById('d2-text').innerText = dictionary[currentLang].d2;
+            document.getElementById('d3-text').innerText = dictionary[currentLang].d3;
+            document.getElementById('d4-text').innerText = dictionary[currentLang].d4;
+
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if(dictionary[currentLang][key]) {
+                    if (key.startsWith('loc-')) {
+                        el.innerHTML = dictionary[currentLang][key];
+                    } else {
+                        el.innerText = dictionary[currentLang][key];
+                    }
+                }
             });
         }
 
-        /* --- 💬 3. 신규 댓글 등록 프로세스 처리 함수 --- */
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const targetTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', targetTheme);
+            document.getElementById('themeBtn').innerText = targetTheme === 'light' ? '🌙 Dark' : '☀️ Light';
+        }
+
+        function navigateSPA(cityId) {
+            // 1. 모든 도시 콘텐츠 숨김 처리
+            const contents = document.querySelectorAll('.spa-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // 2. 내비게이션 바의 모든 버튼 활성화 스타일 해제
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // 3. 선택된 도시 콘텐츠 영역 표시 및 해당 버튼 활성화
+            document.getElementById(cityId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // 4. 컴포넌트가 바뀔 때 시선이 자연스럽게 가도록 해당 섹션 상단으로 스크롤 이동
+            document.getElementById('introduction').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            
+            document.getElementById('progressBar').style.width = scrollPercent + '%';
+
+            if(window.innerWidth > 850) {
+                const hero = document.getElementById('heroSection');
+                hero.style.backgroundPositionY = (scrollTop * 0.4) + 'px';
+            }
+        });
+
         function addComment() {
             const authorInput = document.getElementById('commentAuthor');
             const textInput = document.getElementById('commentText');
             
             if(!authorInput.value.trim() || !textInput.value.trim()) {
-                alert('이름과 한줄평 내용을 모두 채워주세요! 😊');
+                alert('이름과 한줄평 내용을 모두 채워주세요!');
                 return;
             }
 
-            // 날짜 생성 (형식: YYYY.MM.DD)
             const now = new Date();
             const dateString = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
 
-            // 이스케이프가 완료된 깔끔한 오브젝트 객체 빌드
-            const newComment = {
-                author: escapeHtml(authorInput.value),
-                date: dateString,
-                text: escapeHtml(textInput.value)
-            };
+            const commentItem = document.createElement('div');
+            commentItem.className = 'comment-item';
+            commentItem.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-author">${escapeHtml(authorInput.value)}</span>
+                    <span>${dateString}</span>
+                </div>
+                <div class="comment-body">${escapeHtml(textInput.value)}</div>
+            `;
 
-            // 기존 배열 데이터 로드 -> 새로운 데이터 삽입
-            const currentComments = JSON.parse(localStorage.getItem('hokkaidoComments')) || [];
-            currentComments.push(newComment);
+            const list = document.getElementById('commentsList');
+            list.insertBefore(commentItem, list.firstChild);
 
-            // 로컬 스토리지 데이터 동기화 업데이트 
-            saveComments(currentComments);
-
-            // UI 갱신 재렌더링
-            renderComments();
-
-            // 폼 필드 입력란 리셋
             authorInput.value = '';
             textInput.value = '';
         }
 
-        /* --- 💬 4. 보안 강화를 위한 HTML 이스케이프 헬퍼 함수 --- */
         function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;")
-                      .replace(/</g, "&lt;")
-                      .replace(/>/g, "&gt;")
-                      .replace(/"/g, "&quot;")
-                      .replace(/'/g, "&#039;");
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        /* --- 💬 5. 브라우저 로딩 완료 즉시 데이터 바인딩 지시 --- */
-        window.addEventListener('DOMContentLoaded', renderComments);
+        /* --- 파티클 엔진 --- */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let lastScrollY = window.scrollY;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, speedY) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = speedY * 0.15 + (Math.random() * 1 - 0.5);
+                this.opacity = 1;
+                this.fade = Math.random() * 0.015 + 0.01;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= this.fade;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.size > 2.5 ? '#8bb2d6' : '#ffffff';
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            const deltaY = currentScrollY - lastScrollY;
+            lastScrollY = currentScrollY;
+
+            if (Math.abs(deltaY) > 2) {
+                for (let i = 0; i < 2; i++) {
+                    const randomX = Math.random() * canvas.width;
+                    particles.push(new Particle(randomX, Math.random() * canvas.height, -deltaY));
+                }
+            }
+        });
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].opacity <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }A
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
     </script>
 </body>
 </html>
